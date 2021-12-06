@@ -7,7 +7,7 @@ import Feelings from './Feelings';
 import Recommend from './Recommend';
 import ThankYou from './ThankYou';
 
-
+// Gatekeeper component for all other components
 const FeedbackForm = () => {
     const [activeStep, setActiveStep] = useState(0);
     const [rating, setRating] = useState(0);
@@ -22,11 +22,17 @@ const FeedbackForm = () => {
     const doctorLN = data.entry[1].resource.name[0].family;
     const ailment = data.entry[3].resource.code.coding[0].name;
 
+    // Functions for Recommend Component
     const handleNextRecommend = (e) => {
         e.preventDefault();
         setActiveStep(activeStep + 1);
     }
 
+    const handleSliderChange = (e, data) => {
+        setRating(data);
+    }
+
+    // Functions for Diagnosis Component
     const handleNextDiagnosis = (e) => {
         e.preventDefault();
         
@@ -41,18 +47,12 @@ const FeedbackForm = () => {
         }
     }
 
-    const handleBack = () => {
-        setActiveStep(activeStep - 1);
-    }
-
-    const handleSliderChange = (e, data) => {
-        setRating(data);
-    }
-
     const handleDiagChange = (e) => {
         setDiagnosis(e.target.value)
     }
 
+    
+    // Submit form on Feelings Component
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -69,9 +69,18 @@ const FeedbackForm = () => {
         }
     }
 
+    
+    // Handler for Back button
+    const handleBack = () => {
+        setActiveStep(activeStep - 1);
+    }
+
+    // Switch statement to handle the component presented based on active step
     switch (activeStep) {
         case 0:
             return (
+                // Props passed to Recommend coomponent
+                // (Patient First Name, Doctor Last Name, steps array, Active Step and handler functions)
                 <Recommend
                     patientFN={patientFN}
                     doctorLN={doctorLN}
@@ -83,6 +92,8 @@ const FeedbackForm = () => {
             );
         case 1:
             return (
+                // Props passed to Diagnosis coomponent
+                // Patient Diagnosis, Doctor Last Name, steps array, Active Step and handler functions
                 <Diagnosis
                     ailment={ailment}
                     doctorLN={doctorLN}
@@ -96,6 +107,8 @@ const FeedbackForm = () => {
             );
         case 2:
             return (
+                // Props passed to Feelings coomponent
+                // Patient Diagnosis, steps array, Active Step and handler functions
                 <Feelings
                     ailment={ailment}
                     handleBack={handleBack}
@@ -106,6 +119,8 @@ const FeedbackForm = () => {
             )
         case 3:
             return (
+                // Props passed to ThankYou coomponent
+                // Patient Diagnosis, Doctor Last Name, Responses to questions, steps array, Active Step and handler functions
                 <ThankYou
                     ailment={ailment}
                     doctorLN={doctorLN}
@@ -121,4 +136,4 @@ const FeedbackForm = () => {
     }
 }
 
-export default FeedbackForm
+export default FeedbackForm;
